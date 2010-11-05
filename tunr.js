@@ -83,7 +83,7 @@ function make_post(time,accuracy) {
     seconds = time%60,
     time_text = minutes ? minutes+' minutes, '+seconds+' seconds' : seconds+' seconds';
     accuracy = ~~accuracy+'%';
-  return 'I played tunr in '+time_text+' with '+accuracy+' accuracy. '+tunr.shortlink;
+  return 'I played #tunr in '+time_text+' with '+accuracy+' accuracy. '+tunr.shortlink;
 }
 
 app.get('/twitter', function(req, res) {
