@@ -161,7 +161,7 @@ app.get('/facebook/return', function(req, res){
       db.open(function(err, db) {
         db.collection(m.collection, function(err, collection) {
           collection.save({
-            'type': 'fb';
+            'type': 'fb',
             'userid':data.id.split('_')[0], // userid_postid 
             'time':req.query.time,
             'accuracy':req.query.accuracy
