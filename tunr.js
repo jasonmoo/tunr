@@ -81,7 +81,7 @@ function make_post(time,accuracy) {
   var time = ~~time,
     minutes = ~~(time/60),
     seconds = time%60,
-    time_text = minutes ? minutes+' minutes, '+seconds+' seconds' : seconds+' seconds';
+    time_text = minutes ? minutes+' minute'.(minutes>1?'s':'').', '+seconds+' seconds' : seconds+' seconds';
     accuracy = ~~accuracy+'%';
   return 'I played #tunr in '+time_text+' with '+accuracy+' accuracy. '+tunr.shortlink;
 }
