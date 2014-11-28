@@ -4,13 +4,13 @@ Array.prototype.average = function() {
   return s/this.length;
 };
 
-_tunr = { 
+_tunr = {
   time: null,
   accuracy: null,
   scores:[],
-  add_score: function(score) { 
-    this.scores.push(score); 
-    if (this.scores.length === 3) {
+  add_score: function(score) {
+    this.scores.push(score);
+    if (this.scores.length === 1) {
       stopwatch.stop();
       var acc = 100-Math.round(this.scores.average()*10)*.1;
       _tunr.time = stopwatch.time;
@@ -19,7 +19,6 @@ _tunr = {
       $('#report_score')
         .find('#time').text(stopwatch.toString()).end()
         .find('#accuracy').text(acc+'%').end()
-        .find('#post').text('I played #tunr in '+stopwatch.toString()+' with '+acc+'% accuracy. http://is.gd/fYgKn');
       $('#report_score_wrapper').slideDown(1000,function() {
         var top = $(this).offset()['top'];
         $('body').animate({scrollTop:top},1000,function() {
@@ -67,20 +66,7 @@ $.extend(Stopwatch.prototype,{
 
 stopwatch = new Stopwatch('#stopwatch div');
 
-$('#facebook, #twitter').click(function(e) {
-  var network = $(this).attr('id');
-  window.open('http://tunr.jasonmooberry.com:3000/'+network+'?time='+_tunr.time+'&accuracy='+_tunr.accuracy,'auth_window','width=1000,height=650,scrollbars=0,menubar=0,resizable=0,toolbar=0');
-  $(window).unbind('.'+network).bind('success.'+network,function(ee) {
-    $(e.target)
-      .unbind()
-      .replaceWith('<div id="'+network+'_done">Done!</div>');
-    if ($('#post_buttons div[id$=_done]').length === 2) {
-      
-    }
-  });
-});
-
-// start stopwatch on first mousedown 
+// start stopwatch on first mousedown
 $('#mybox').bind('mousedown.stopwatch',function() {
   $('#stopwatch, #steps').fadeIn('slow',function() { stopwatch.start(); });
   $(this).unbind('.stopwatch');
@@ -98,7 +84,7 @@ setTimeout(function() {
   $('#sineblocks div').fadeIn(1200);
 	$('#steps div:nth-child(1)').css('background','green');
 },1000);
-  
+
 $('#mybox').mousedown(function(e) {
   e.preventDefault();
   $('#sineblocks').css('cursor','url(cur_updown.png), move');
@@ -112,7 +98,7 @@ $('#mybox').mousedown(function(e) {
       // min/max to ensure next_location is within the sandbox
       next_location = Math.min(Math.max(next_location,20),section_height);
       e.target.style.top = next_location+'px';
-      
+
       // calculate similarity by averaging movement history differences between boxes
       history.push(Math.abs(next_location-parseInt(sine_box[0].style.top.match(/^-?\d+/)[0],10)));
       if (history.length > 200) {
@@ -144,7 +130,7 @@ function push_down(bar) {
   }
   bar.prepend(bar.find('div:last').detach().css({height:0,margin:0}));
   var new_element = bar.find('div:first');
-    
+
   (function expand_ball() {
     setTimeout(function() {
       var top = parseInt(new_element.css('margin-top').match(/^-?\d+/)[0],10);
@@ -161,7 +147,7 @@ function push_down(bar) {
         return expand_ball();
       }
       push_down(bar);
-    },30);    
+    },30);
   })();
 }
 
@@ -172,7 +158,7 @@ function shrink_up(bar) {
   bar.find('div:first').remove();
   bar.append(bar.find('div:first').clone());
   var new_element = bar.find('div:first-child');
-    
+
   (function shrink_ball() {
     setTimeout(function() {
       var top = parseInt(new_element.css('margin-top').match(/^-?\d+/)[0],10);
@@ -188,11 +174,11 @@ function shrink_up(bar) {
         return shrink_ball();
       }
       shrink_up(bar);
-    },30);    
+    },30);
   })();
 }
 
-function block_mousedown(e) { 
+function block_mousedown(e) {
   e.preventDefault();
   $('#threeblocks').css('cursor','url(cur_up.png), move');
   var history = [],
@@ -213,18 +199,18 @@ function block_mousedown(e) {
         });
       }
       var next_location = ee.pageY-y_offset;
-      
+
       // min/max to ensure next_location is within the sandbox
       next_location = Math.min(Math.max(next_location,20),300);
       e.target.style.top = next_location+'px';
-      
+
       // calculate similarity by averaging movement history differences between boxes
       history.push(Math.abs(next_location+pacer_diff-pacer.position()['top']));
       if (history.length > 20) {
         var avg = history.average();
         if (avg > 20) {
           reset_blocks(true);
-        } 
+        }
       }
     },
     'mouseup.blocks': function(ee) {
@@ -259,7 +245,7 @@ function block_mousedown(e) {
     }
   });
 }
-    
+
 function play_block(block) {
   block.unbind('.blocks').addClass('play');
   clearTimeout(block[0]._tunr.timeout);
@@ -329,9 +315,9 @@ function color_spin(img) {
   var coords = circle();
   img.style.top = coords['y']-100+'px';
   img.style.left = coords['x']-100+'px';
-  setTimeout(function() { color_spin(img); },10); 
+  setTimeout(function() { color_spin(img); },10);
 }
-$('#colorblocks').bind('start',function(e) { 
+$('#colorblocks').bind('start',function(e) {
   $('#steps div:nth-child(3)').css('background','green');
   $('#colorblocks_wrapper').slideDown(1000,function() {
     var top = $(this).offset()['top'];
@@ -339,7 +325,7 @@ $('#colorblocks').bind('start',function(e) {
       $(e.target).fadeIn(1200);
     });
   });
-  color_spin($('#color_box img')[0]); 
+  color_spin($('#color_box img')[0]);
 });
 
 $('#my_color_box img').mousedown(function(e) {
@@ -350,16 +336,16 @@ $('#my_color_box img').mousedown(function(e) {
     x_offset = e.pageX-img_offset['left']+container_offset['left'],
     y_offset = e.pageY-img_offset['top']+container_offset['top'],
     pace_img = $('#color_box img')[0];
-    
+
   $(document).bind({
     'mousemove.mycolorbox': function(ee) {
       ee.preventDefault();
       var next_x = Math.max(Math.min(ee.pageX-x_offset,60),-260);
       var next_y = Math.max(Math.min(ee.pageY-y_offset,60),-260);
-                 
+
       e.target.style.left = next_x+'px';
       e.target.style.top = next_y+'px';
-      
+
       // calculate similarity by averaging movement history differences between boxes
       var distance = Math.abs(next_x-parseInt(pace_img.style.top.match(/^-?\d+/)[0],10)) + Math.abs(next_y-parseInt(pace_img.style.left.match(/^-?\d+/)[0],10));
       history.push(distance);
@@ -371,7 +357,7 @@ $('#my_color_box img').mousedown(function(e) {
           $(document).unbind('.mycolorbox');
           $('#my_color_box img').unbind();
           color_spin($('#my_color_box img')[0]);
-        } 
+        }
       }
     },
     'mouseup.mycolorbox': function(ee) {
